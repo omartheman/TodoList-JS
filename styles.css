@@ -1,0 +1,21 @@
+.todo-list{
+  display: inline-block;
+}
+.input-container {
+  display: block;
+}
+.delete-button {
+  border-radius: 100px;
+  margin-right: 20px;
+}
+header {
+  background-color: rgb(42, 42, 42);
+  color: white;
+  padding: 20px;
+}
+body{
+  margin:0;
+}
+h2 {
+  margin: 20px 0;
+}
