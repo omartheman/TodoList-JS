@@ -4,19 +4,41 @@ const deleteButton = document.querySelector('.delete-button');
 const todoInput = document.querySelector('.todo-input');
 let todoInputVal;
 
-function createArr(val){
-  for (let i = 0; i < arr.length; i++){
-    //create an HTML element for each array. 
-  }
-}
-
 let arr=[];
 addButton.onclick = () => {addItem()};
 
-function displayListArr(){
-  for (let i = 0; i < arr.length; i++){
-    //
+function setAttributes(el, attrs) {
+  for (const key in attrs) {
+    el.setAttribute(key, attrs[key])
   }
+}
+
+function insertElsAfterend(neighborEl,newEls){
+  console.log('inserting els afterend')
+  for (const key in newEls){
+    neighborEl.insertAdjacentElement('afterend', newEls[key])
+  }
+}
+
+function editItem(anchor){
+  const input = document.createElement('input');
+  setAttributes(input, {
+    class: "bongo-drums",
+    type: "text",
+    value: anchor.innerText,
+  })
+  const button = document.createElement('button');
+  setAttributes(button, {
+    class: 'btn btn-primary'
+  })
+  const input2 = `<input type="text" value=${anchor.innerText}><button class="edit-button btn btn-primary">Save Edit</button>`
+  // anchor.insertAdjacentHTML('afterend', input)
+  // anchor.insertAdjacentElement('afterend', input);
+  insertElsAfterend(anchor, {
+    0: input
+  })
+  
+  anchor.remove();
 }
 
 function displayList (){
@@ -25,7 +47,7 @@ function displayList (){
   for (let i = 0; i < arr.length; i++){
     todoList.insertAdjacentHTML('beforeend',
     `<li class="list-group-item" id="${i}">
-    <button onClick="deleteFunc(this)" class="delete-button btn btn-outline-danger">X</button> ${arr[i]}
+    <button onClick="deleteFunc(this)" class="delete-button btn btn-outline-danger">X</button><a href="#" onClick="editItem(this)">${arr[i]}</a>
     </li>`
     )
   }
