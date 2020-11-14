@@ -2,27 +2,22 @@ const addButton = document.querySelector('.todo-add-button');
 const todoList = document.querySelector('.todo-list');
 const deleteButton = document.querySelector('.delete-button');
 const todoInput = document.querySelector('.todo-input');
-let todoInputVal = '';
-//update todoInputVal on change
 
 let arr=[];
 
-
-function updateInput(){
-  todoInputVal = todoInput.value;
-}
+//update old array with edits
 
 function addItem(){
-  if (todoInputVal === '') {alert('Please input something'); return}
+  if (todoInput.value === '') {alert('Please input something'); return}
   
   //remove all list items
   while (todoList.firstChild) {
     todoList.removeChild(todoList.firstChild);
   }
   
-  arr.push(todoInputVal);
+  arr.push(todoInput.value);
   displayList()
-  todoInputVal = null;
+  todoInput.value = null;
 }
 
 const deleteFunc = (el) => {
@@ -40,7 +35,7 @@ function setAttributes(el, attrs) {
   }
 }
 
-function insertElsAfterend(neighborEl,newEls){
+function insertElementsAfterend(neighborEl,newEls){
   newEls.forEach(el => neighborEl.insertAdjacentElement('afterend', el)
   )
 }
@@ -57,7 +52,7 @@ function editItem(anchor){
     class: 'edit-button btn btn-outline-primary',
     onClick: 'saveEdit(this)'
   })
-  insertElsAfterend(anchor, [
+  insertElementsAfterend(anchor, [
     button,
     input
   ]);
@@ -68,14 +63,13 @@ function p(string){
   console.log(string)
 }
 function saveEdit(editButton){
-  //save innerText from input
-  p(editButton.parentNode.querySelector('input').value);
-  //create a new span node 
-  //and append it to parent node, 
-  //then remove edit button
+  const itemId = editButton.parentNode.id;
   const input = editButton.parentNode.querySelector('input');
   const anchor = document.createElement('a');
   anchor.innerText = input.value;
+  //change value in array
+  arr[itemId] = input.value 
+
   setAttributes(anchor, {
     href: '#',
     onClick: 'editItem(this)'
@@ -83,16 +77,40 @@ function saveEdit(editButton){
   editButton.insertAdjacentElement('afterend', anchor);
   input.remove();
   editButton.remove();
-  // <a href="#" onClick="editItem(this)">${arr[i]}</a>
 }
 
 function displayList (){
   //display a list of html elements with your array...
   for (let i = 0; i < arr.length; i++){
-    todoList.insertAdjacentHTML('beforeend',
-    `<li class="list-group-item" id="${i}">
-    <button onClick="deleteFunc(this)" class="delete-button btn btn-outline-danger">X</button><a href="#" onClick="editItem(this)">${arr[i]}</a>
-    </li>`
-    )
+    const li = document.createElement('li');
+    setAttributes(li, {
+      class: 'list-group-item',
+      id: `${i}`,
+    })
+    console.log(li);
+    const button = document.createElement('button');
+    setAttributes(button, {
+      onClick: 'deleteFunc(this)',
+      class: 'delete-button btn btn-outline-danger',
+    })
+    button.innerText = 'X';
+    const anchor = document.createElement('a');
+    setAttributes(anchor, {
+      href: '#',
+      onClick: 'editItem(this)'
+    })
+    anchor.innerText = `${arr[i]}`; 
+    li.insertAdjacentElement('afterbegin', button);
+    li.insertAdjacentElement('beforeend', anchor);
+    todoList.insertAdjacentElement('beforeend', li);
+
+
+    // shorter method:
+    
+    // todoList.insertAdjacentHTML('beforeend',
+    // `<li class="list-group-item" id="${i}">
+    // <button onClick="deleteFunc(this)" class="delete-button btn btn-outline-danger">X</button><a href="#" onClick="editItem(this)">${arr[i]}</a>
+    // </li>`
+    // )
   }
 }
